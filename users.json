@@ -1,16 +1,23 @@
 {
-  "users": [
-    {
-      "username": "lena",
-      "password": "pbkdf2:sha256:260000$rBcqvczLoMZSWTnl$ec4d2ba1c54918be5902b3591daf81520d11a65885d2d93ee0a66798d071ba82",
-      "podcasts": [],
-      "roles": ["user"]
-    },
-    {
-      "username": "mikail",
-      "password": "pbkdf2:sha256:260000$BiABZY3pEYYc5y7t$aaee6b696fe5dcc1ec46fdf25c3a15de736a0e818ea9df434c2977d1583a44a0",
-      "podcasts": ["YKWIM.mp3"],
-      "roles": ["admin", "user"]
-    }
-  ]
+    "users": [
+        {
+            "username": "lena",
+            "password": "pbkdf2:sha256:260000$rBcqvczLoMZSWTnl$ec4d2ba1c54918be5902b3591daf81520d11a65885d2d93ee0a66798d071ba82",
+            "podcasts": [],
+            "roles": [
+                "user"
+            ]
+        },
+        {
+            "username": "mikail",
+            "password": "pbkdf2:sha256:260000$BiABZY3pEYYc5y7t$aaee6b696fe5dcc1ec46fdf25c3a15de736a0e818ea9df434c2977d1583a44a0",
+            "podcasts": [
+                "YKWIM.mp3"
+            ],
+            "roles": [
+                "admin",
+                "user"
+            ]
+        }
+    ]
 }
