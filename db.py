@@ -3,9 +3,14 @@ from werkzeug.security import generate_password_hash
 import datetime
 
 
+def get_config():
+    return json.load(open('./config.json', 'r'))
+
 def get_podcast_path(name):
     return 'Podcasts/Audios/' + name
 
+def get_image_path(name):
+    return 'Podcasts/Images/' + name
 def get_date_now():
     return datetime.datetime.now().strftime("%a, %d %h %G %T -01:00")
 
@@ -115,7 +120,6 @@ class Driver:
                     if podcast['title'] == data.get('podcast_title'):
                         items = podcast.get('items')
                         items.append(Episode(data['title'], data['description'],
-                                             data['author'],
                                              get_date_now(),
                                              data['enclosure'],
                                              data['explicit'],
@@ -141,6 +145,123 @@ class Driver:
                             file.write(json.dumps(data, indent=4))
                         return True
         return False
+
+    def get_podcast(self, username, title):
+        if not self.podcast_exists(username, title):
+            return None
+
+        data = self.all_users()
+        users = data.get('users')
+        for user in users:
+            if user['username'] == username:
+                podcasts = user.get('podcasts')
+                for podcast in podcasts:
+                    if podcast['title'] == title:
+                        return podcast
+
+
+    def update_podcast(self, username, req_data):
+        if not self.podcast_exists(username, req_data.get('pod_title')):
+            return False
+
+        data = self.all_users()
+        users = data.get('users')
+        for user in users:
+            if user['username'] == username:
+                podcasts = user.get('podcasts')
+                for podcast in podcasts:
+                    if podcast['title'] == req_data.get('pod_title'):
+                        try:
+                            podcast['title'] = req_data['title']
+                        except KeyError:
+                            pass
+
+                        try:
+                            podcast['description'] = req_data['description']
+                        except KeyError:
+                            pass
+
+                        try:
+                            podcast['author'] = req_data['author']
+                        except KeyError:
+                            pass
+
+                        try:
+                            podcast['link'] = req_data['link']
+                        except KeyError:
+                            pass
+
+                        try:
+                            podcast['language'] = req_data['language']
+                        except KeyError:
+                            pass
+
+                        try:
+                            podcast['explicit'] = req_data['explicit']
+                        except KeyError:
+                            pass
+
+                        try:
+                            podcast['image'] = req_data['image']
+                        except KeyError:
+                            pass
+
+                        try:
+                            podcast['category'] = req_data['category']
+                        except KeyError:
+                            pass
+
+                        with open(self.path, 'w') as file:
+                            file.write(json.dumps(data, indent=4))
+                        return True
+
+    def update_episode(self, username, req_data):
+        if not self.episode_exists(username, req_data['pod_title'], req_data['ep_title']):
+            return False
+
+        data = self.all_users()
+        users = data.get('users')
+        for user in users:
+            if user['username'] == username:
+                podcasts = user.get('podcasts')
+                for podcast in podcasts:
+                    if podcast['title'] == req_data.get('pod_title'):
+                        items = podcast.get('items')
+                        for item in items:
+                            if item['title'] == req_data.get('ep_title'):
+                                try:
+                                    item['title'] = req_data['title']
+                                except KeyError:
+                                    pass
+
+                                try:
+                                    item['description'] = req_data['description']
+                                except KeyError:
+                                    pass
+
+                                try:
+                                    item['enclosure'] = req_data['enclosure']
+                                except KeyError:
+                                    pass
+
+                                try:
+                                    item['explicit'] = req_data['explicit']
+                                except KeyError:
+                                    pass
+
+                                try:
+                                    item['image'] = req_data['image']
+                                except KeyError:
+                                    pass
+
+                                try:
+                                    item['category'] = req_data['category']
+                                except KeyError:
+                                    pass
+
+                                with open(self.path, 'w') as file:
+                                    file.write(json.dumps(data, indent=4))
+                                return True
 
 
 
@@ -181,10 +302,9 @@ class Podcast:
 
 
 class Episode:
-    def __init__(self, title, description, author, pub_date, enclosure, explicit, image, keywords):
+    def __init__(self, title, description, pub_date, enclosure, explicit, image, keywords):
         self.title = title
         self.description = description
-        self.author = author
         self.pub_date = pub_date
         self.enclosure = enclosure
         self.explicit = explicit

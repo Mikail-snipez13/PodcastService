@@ -1,0 +1,6 @@
+{
+  "hostname": "localhost",
+  "port": 5000,
+  "protocol": "http",
+  "port_in_url": true
+}

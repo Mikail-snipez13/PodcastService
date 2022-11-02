@@ -20,7 +20,37 @@
         {
             "username": "markus",
             "password": "pbkdf2:sha256:260000$z5Omf2lXujtiNWAd$97d8917b349574d7dca97fee66a6c4921629dddb86af4225f190b84d9299767c",
-            "podcasts": [],
+            "podcasts": [
+                {
+                    "title": "Nebennotiz",
+                    "link": "http://example.com",
+                    "description": "Wochentliche Nebennotizen um besser und erfolgreicher durchs Leben zu gehen.",
+                    "language": "de",
+                    "author": "Der Weise",
+                    "image": "nebennotiz.png",
+                    "explicit": "clean",
+                    "category": [
+                        "Hobbies",
+                        "Philosophy",
+                        "Relationships"
+                    ],
+                    "type": "episodic",
+                    "items": [
+                        {
+                            "title": "Gegen das System",
+                            "description": "Ein allt\u00e4glicher Kampf gegen das System. Sei bereit was zu ver\u00e4ndern",
+                            "pub_date": "Wed, 02 Nov 2022 14:14:23 -01:00",
+                            "enclosure": "YKWIM.mp3",
+                            "explicit": "clean",
+                            "image": "01-nebennotiz.png",
+                            "keywords": [
+                                "Hobbies",
+                                "Life"
+                            ]
+                        }
+                    ]
+                }
+            ],
             "roles": [
                 "user"
             ]
