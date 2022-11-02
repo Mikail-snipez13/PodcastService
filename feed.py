@@ -3,7 +3,7 @@ from XmlElement import XmlElement as X
 from db import Podcast, get_config
 
 
-def get_feed(username, podcast: dict):
+def get_feed(user, podcast: dict):
     config = get_config()
     cList = []
     for c in podcast.get('category'):
@@ -44,6 +44,7 @@ def get_feed(username, podcast: dict):
             X('link', t=podcast['link']),
             X('language', t=podcast['language']),
             X('itunes:author', t=podcast['author']),
+            X('itunes:email', t=user.email),
             X('itunes:image', {'href': config['protocol'] + '://' + config['hostname'] + port
                                            + '/podcast/image/' +  podcast['image']}),
             X('itunes:explicit', t=podcast['explicit']),

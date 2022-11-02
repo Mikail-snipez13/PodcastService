@@ -4,7 +4,6 @@ __version__ = "0.0.1"
 import flask
 from flask import Flask, request, send_file, jsonify, abort
 from flask_httpauth import HTTPBasicAuth
-from flask_cors import CORS, cross_origin
 from db import Driver, get_podcast_path, get_config, get_image_path
 import json
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -199,7 +198,7 @@ def get_feed(username, podcast):
     if not driver.podcast_exists(username, podcast):
         return {"error": "404", "message": "no podcast with this name found"}, 404
     p = driver.get_podcast(username, podcast)
-    res = flask.Response(feed.get_feed(username, p))
+    res = flask.Response(feed.get_feed(driver.get_user(username), p))
     res.headers['Content-Type'] = "text/xml"
     return res
 

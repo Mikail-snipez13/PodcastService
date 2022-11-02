@@ -267,10 +267,11 @@ class Driver:
 
 
 class User:
-    def __init__(self, username=None, password=None, user=None):
+    def __init__(self, username=None, password=None, email=None, user=None):
         if username is not None and password is not None:
             self.username = username
             self.password = generate_password_hash(password)
+            self.email = email
             self.podcasts = []
             self.roles = ["user"]
 
@@ -278,6 +279,7 @@ class User:
             self.username = user.get('username')
             self.password = user.get('password')
             self.podcasts = user.get('podcasts')
+            self.email = user.get('email')
             self.roles = user.get('roles')
 
     def add_podcast(self, podcast):
