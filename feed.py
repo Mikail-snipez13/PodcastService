@@ -15,11 +15,39 @@ def get_feed(user, podcast: dict):
 
     itemList = []
     for item in podcast.get('items'):
+        feed = X('rss', {
+            'xmlns:media': "http://search.yahoo.com/mrss/",
+            'xmlns:itunes': "http://www.itunes.com/dtds/podcast-1.0.dtd",
+            'xmlns:dcterms': "http://purl.org/dc/terms/",
+            'xmlns:spotify': "http://www.spotify.com/ns/rss",
+            'xmlns:psc': "http://podlove.org/simple-chapters/",
+            'version': "2.0"
+        }, s=[
+            X('channel', s=[
+                X('title', t=podcast['title']),
+                X('description', t=podcast['description']),
+                X('link', t=podcast['link']),
+                X('language', t=podcast['language']),
+                X('itunes:author', t=podcast['author']),
+                X('itunes:owner', s=[
+                    X('itunes:email', t=user.email),
+                    X('itunes:name', t=user.firstname + ' ' + user.lastname)
+                ]),
+                X('itunes:image', {'href': config['protocol'] + '://' + config['hostname'] + port
+                                           + '/podcast/image/' +  podcast['image']}),
+                X('itunes:explicit', t=podcast['explicit']),
+                X('itunes:category', s=cList),
+                X('itunes:type', t=podcast['type']),
+                X('items', s=itemList)
+            ])
+        ])
         itemList.append(
             X('item', s=[
                 X('title', t=item['title']),
                 X('description', t=item['description']),
                 X('pubDate', t=item['pub_date']),
+                X('guid', {"isPermaLink": True}, t=config['protocol'] + '://' + config['hostname'] + port
+                                           + '/podcast/episode/' + item['enclosure']),
                 X('media:content', {'type': 'audio/mpeg',
                                     'url': config['protocol'] + '://' + config['hostname'] + port
                                            + '/podcast/episode/' + item['enclosure']}),
@@ -30,29 +58,6 @@ def get_feed(user, podcast: dict):
             ])
         )
 
-    feed = X('rss', {
-        'xmlns:media': "http://search.yahoo.com/mrss/",
-        'xmlns:itunes': "http://www.itunes.com/dtds/podcast-1.0.dtd",
-        'xmlns:dcterms': "http://purl.org/dc/terms/",
-        'xmlns:spotify': "http://www.spotify.com/ns/rss",
-        'xmlns:psc': "http://podlove.org/simple-chapters/",
-        'version': "2.0"
-    }, s=[
-        X('channel', s=[
-            X('title', t=podcast['title']),
-            X('description', t=podcast['description']),
-            X('link', t=podcast['link']),
-            X('language', t=podcast['language']),
-            X('itunes:author', t=podcast['author']),
-            X('itunes:email', t=user.email),
-            X('itunes:image', {'href': config['protocol'] + '://' + config['hostname'] + port
-                                           + '/podcast/image/' +  podcast['image']}),
-            X('itunes:explicit', t=podcast['explicit']),
-            X('itunes:category', s=cList),
-            X('itunes:type', t=podcast['type']),
-            X('items', s=itemList)
-        ])
-    ])
 
     return minidom.parseString(feed.to_string()).toprettyxml()
 

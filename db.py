@@ -63,6 +63,9 @@ class Driver:
             return 0
 
     def podcast_exists(self, username, title):
+        if not self.user_exists(username):
+            return False
+
         podcasts = self.get_user(username).podcasts
         for podcast in podcasts:
             if podcast.get('title') == title:
@@ -267,12 +270,15 @@ class Driver:
 
 
 class User:
-    def __init__(self, username=None, password=None, email=None, user=None):
-        if username is not None and password is not None:
+    def __init__(self, username=None, password=None, email=None, firstname=None, lastname=None, user=None):
+        if username is not None and password is not None and email is not None and \
+            firstname is not None and lastname is not None:
             self.username = username
             self.password = generate_password_hash(password)
             self.email = email
             self.podcasts = []
+            self.firstname = firstname,
+            self.lastname = lastname,
             self.roles = ["user"]
 
         if user is not None:
@@ -280,6 +286,8 @@ class User:
             self.password = user.get('password')
             self.podcasts = user.get('podcasts')
             self.email = user.get('email')
+            self.firstname = user.get('firstname')
+            self.lastname = user.get('lastname')
             self.roles = user.get('roles')
 
     def add_podcast(self, podcast):
